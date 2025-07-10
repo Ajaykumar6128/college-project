@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Street Light Management System Dashboard</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <!-- Custom CSS -->
+  <style>
+    body {
+      background-color: #f8f9fa;
+      color: #333;
+      font-family: Arial, sans-serif;
+    }
+    .navbar {
+      background-color: #007bff !important;
+    }
+    .navbar-brand {
+      color: #fff !important;
+    }
+    .footer {
+      background-color: #007bff;
+      color: #fff;
+      text-align: center;
+      padding: 20px 0;
+      width: 100%;
+    }
+    #map {
+      height: 400px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Top bar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+      <a class="navbar-brand" href="#">Street Light Management System</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <h1 class="text-center mt-4 mb-4">Street Light Management System Dashboard</h1>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header bg-primary text-white">
+            Sensor Data
+          </div>
+          <div class="card-body">
+            <!-- Real-time sensor data -->
+            <p>Light Intensity: <span id="lightIntensity">200</span> lux</p>
+            <p>Motion Detected: <span id="motionDetected">No</span></p>
+            <!-- Add more sensor data as needed -->
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header bg-success text-white">
+            Fault Status
+          </div>
+          <div class="card-body">
+            <!-- Real-time fault status -->
+            <p>Fault Detected: <span id="faultDetected">No</span></p>
+            <p>Fault Location: <span id="faultLocation">N/A</span></p>
+            <!-- Add more fault status data as needed -->
+            <!-- Contact information for local service personnel -->
+            <p>Contact Local Service Personnel:<br>Name: John Doe<br>Phone: +1234567890<br>Email: john@example.com</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-4">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header bg-info text-white">
+            Maintenance Schedule
+          </div>
+          <div class="card-body">
+            <!-- Real-time maintenance schedule -->
+            <p>Next Maintenance: <span id="nextMaintenance">15th April 2024, 10:00 AM</span></p>
+            <!-- Add more maintenance schedule data as needed -->
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header bg-warning text-white">
+            Energy Consumption Monitoring
+          </div>
+          <div class="card-body">
+            <!-- Real-time energy consumption data -->
+            <p>Current Consumption: <span id="currentConsumption">500</span> kWh</p>
+            <p>Average Daily Consumption: <span id="avgDailyConsumption">600</span> kWh</p>
+            <!-- Add more energy consumption data as needed -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-4">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header bg-secondary text-white">
+            Weather Integration
+          </div>
+          <div class="card-body">
+            <!-- Real-time weather data -->
+            <p>Temperature: <span id="temperature">25</span>°C</p>
+            <p>Humidity: <span id="humidity">60</span>%</p>
+            <!-- Add more weather data as needed -->
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header bg-danger text-white">
+            Traffic Monitoring
+          </div>
+          <div class="card-body">
+            <!-- Real-time traffic data -->
+            <p>Traffic Density: <span id="trafficDensity">Medium</span></p>
+            <p>Average Speed: <span id="avgSpeed">30</span> km/h</p>
+            <!-- Add more traffic data as needed -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-4">
+      <div class="col-12">
+        <div id="map"></div>
+      </div>
+    </div>
+  </div>
+<br>
+  <!-- Footer -->
+  <div class="footer">
+    <div class="container">
+      <p>&copy; 2024 Street Light Management System <b>Designed and Developed by Gowtham & Team</b></p>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS and jQuery (Optional for Bootstrap features) -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <!-- Leaflet JavaScript -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+  <!-- Example JavaScript for updating real-time data (Replace with actual data fetching logic) -->
+  <script>
+    // Example function to update real-time sensor data
+    function updateSensorData() {
+      // Simulated real-time sensor data
+      var lightIntensity = Math.floor(Math.random() * 500) + 100; // Random number between 100 and 600
+      var motionDetected = Math.random() < 0.5 ? "No" : "Yes"; // Randomly generates "Yes" or "No"
+      
+      // Update HTML elements with real-time sensor data
+      $('#lightIntensity').text(lightIntensity);
+      $('#motionDetected').text(motionDetected);
+    }
+
+    // Example function to update real-time fault status
+    function updateFaultStatus() {
+      // Simulated real-time fault status
+      var faultDetected = Math.random() < 0.2 ? "Yes" : "No"; // Randomly generates "Yes" with a 20% chance
+      var faultLocation = faultDetected === "Yes" ? "Street 1, Block A" : "N/A"; // Assigns a location if fault is detected
+      
+      // Update HTML elements with real-time fault status
+      $('#faultDetected').text(faultDetected);
+      $('#faultLocation').text(faultLocation);
+    }
+
+    // Example function to update real-time maintenance schedule
+    function updateMaintenanceSchedule() {
+      // Example next maintenance schedule
+      var nextMaintenance = "16th April 2024, 11:00 AM"; // Example next maintenance schedule
+      
+      // Update HTML element with real-time maintenance schedule
+      $('#nextMaintenance').text(nextMaintenance);
+    }
+
+    // Example function to update real-time energy consumption data
+    function updateEnergyConsumption() {
+      // Simulated real-time energy consumption data
+      var currentConsumption = Math.floor(Math.random() * 1000) + 500; // Random number between 500 and 1500
+      var avgDailyConsumption = 600; // Example average daily consumption
+      
+      // Update HTML elements with real-time energy consumption data
+      $('#currentConsumption').text(currentConsumption);
+      $('#avgDailyConsumption').text(avgDailyConsumption);
+    }
+
+    // Example function to update real-time weather data
+    function updateWeatherData() {
+      // Simulated real-time weather data
+      var temperature = Math.floor(Math.random() * 15) + 20; // Random number between 20 and 35
+      var humidity = Math.floor(Math.random() * 40) + 50; // Random number between 50 and 90
+      
+      // Update HTML elements with real-time weather data
+      $('#temperature').text(temperature);
+      $('#humidity').text(humidity);
+    }
+
+    // Example function to update real-time traffic data
+    function updateTrafficData() {
+      // Simulated real-time traffic data
+      var trafficDensity = ["Low", "Medium", "High"][Math.floor(Math.random() * 3)]; // Randomly selects traffic density
+      var avgSpeed = Math.floor(Math.random() * 50) + 20; // Random number between 20 and 70
+      
+      // Update HTML elements with real-time traffic data
+      $('#trafficDensity').text(trafficDensity);
+      $('#avgSpeed').text(avgSpeed);
+    }
+
+    // Update real-time data every 5 seconds (Example interval, adjust as needed)
+    setInterval(function() {
+      updateSensorData();
+      updateFaultStatus();
+      updateMaintenanceSchedule();
+      updateEnergyConsumption();
+      updateWeatherData();
+      updateTrafficData();
+    }, 5000); // 5000 milliseconds = 5 seconds
+  </script>
+
+  <!-- Initialize Leaflet map -->
+  <!-- Initialize Leaflet map -->
+  <script>
+    var map = L.map('map').setView([12.1277, 78.1579], 10); // Dharmapuri district, Tamil Nadu, India
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    // Function to update pointers dynamically within Dharmapuri district
+    function updatePointers() {
+      var points = [
+        { name: "Point 1", lat: 12.1317, lng: 78.1595 },
+        { name: "Point 2", lat: 12.1273, lng: 78.1629 },
+        { name: "Point 3", lat: 12.1228, lng: 78.1559 },
+        { name: "Point 4", lat: 12.1289, lng: 78.1516 }
+      ];
+
+      // Update marker positions randomly within Dharmapuri district boundary
+      points.forEach(function(point) {
+        point.lat += (Math.random() - 0.5) * 0.01; // Adjust latitude randomly within +/- 0.01 degrees
+        point.lng += (Math.random() - 0.5) * 0.01; // Adjust longitude randomly within +/- 0.01 degrees
+      });
+
+      // Remove existing markers
+      map.eachLayer(function(layer) {
+        if (layer instanceof L.Marker) {
+          map.removeLayer(layer);
+        }
+      });
+
+      // Add markers for each point
+      points.forEach(function(point) {
+        var marker = L.marker([point.lat, point.lng]).addTo(map);
+        marker.bindPopup("<b>" + point.name + "</b>").openPopup();
+      });
+    }
+
+    // Update pointers every 10 seconds
+    setInterval(updatePointers, 10000); // 10000 milliseconds = 10 seconds
+  </script>
+</body>
+</html>
